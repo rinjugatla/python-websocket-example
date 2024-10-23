@@ -9,9 +9,12 @@ class Server():
 
     def __init__(self, host, port):
         self.server = WebsocketServer(host=host, port=port, loglevel=logging.DEBUG)
-        self.log_directory = "./log"
+        # 監視するフォルダ
+        self.watch_directory = "./log"
         # ファイルパス
-        self.logfiles = []
+        self.watched_files = []
+        # 監視間隔
+        self.watch_interval_sec = 1
 
     def new_client(self, client, server):
         """クライアント接続時に実行
@@ -50,17 +53,17 @@ class Server():
         """新規のログがあればクライアントに通知通知
         """
         while True:
-            time.sleep(1)
-            logfiles = glob.glob(f"{self.log_directory}/*")
-            has_newfile = len(logfiles) > len(self.logfiles)
+            time.sleep(self.watch_interval_sec)
+            logfiles = glob.glob(f"{self.watch_directory}/*")
+            has_newfile = len(logfiles) > len(self.watched_files)
             if not has_newfile:
                 continue
 
-            new_filenames = [os.path.basename(x) for x in logfiles if x not in self.logfiles]
+            new_filenames = [os.path.basename(x) for x in logfiles if x not in self.watched_files]
             message = ", ".join(new_filenames)
             self.server.send_message_to_all(message)
 
-            self.logfiles = logfiles
+            self.watched_files = logfiles
 
     def run(self):
         """サーバを起動

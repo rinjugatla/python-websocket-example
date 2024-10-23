@@ -28,7 +28,7 @@ def on_close(ws, status_code, message):
         status_code (_type_): ステータス
         message (_type_): メッセージ
     """
-    print("### closed ###")
+    print("closed connection")
 
 def on_open(ws):
     """通信開始時に実行
@@ -36,7 +36,7 @@ def on_open(ws):
     Args:
         ws (_type_): WebSocket
     """
-    print("Opened connection")
+    print("opened connection")
 
 if __name__ == "__main__":
     # ログを詳細に表示する場合はコメントアウト
