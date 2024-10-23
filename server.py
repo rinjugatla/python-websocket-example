@@ -46,6 +46,22 @@ class Server():
         # クライアントにメッセージ送信
         self.server.send_message_to_all(message)
 
+    def watch_logfile(self):
+        """新規のログがあればクライアントに通知通知
+        """
+        while True:
+            time.sleep(1)
+            logfiles = glob.glob(f"{self.log_directory}/*")
+            has_newfile = len(logfiles) > len(self.logfiles)
+            if not has_newfile:
+                continue
+
+            new_filenames = [os.path.basename(x) for x in logfiles if x not in self.logfiles]
+            message = ", ".join(new_filenames)
+            self.server.send_message_to_all(message)
+
+            self.logfiles = logfiles
+
     def run(self):
         """サーバを起動
         """
@@ -53,6 +69,7 @@ class Server():
         self.server.set_fn_client_left(self.client_left)
         self.server.set_fn_message_received(self.message_received) 
         self.server.run_forever(True)
+        self.watch_logfile()
 
 if __name__ == "__main__":
     HOST = "localhost"
