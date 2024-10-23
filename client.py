@@ -39,7 +39,9 @@ def on_open(ws):
     print("Opened connection")
 
 if __name__ == "__main__":
-    websocket.enableTrace(True)
+    # ログを詳細に表示する場合はコメントアウト
+    # websocket.enableTrace(True)
+
     ws = websocket.WebSocketApp("ws://127.0.0.1:12355",
                                 on_open=on_open,
                                 on_message=on_message,
