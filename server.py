@@ -52,7 +52,7 @@ class Server():
         self.server.set_fn_new_client(self.new_client)
         self.server.set_fn_client_left(self.client_left)
         self.server.set_fn_message_received(self.message_received) 
-        self.server.run_forever()
+        self.server.run_forever(True)
 
 if __name__ == "__main__":
     HOST = "localhost"
